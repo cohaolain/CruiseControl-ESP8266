@@ -1,0 +1,23 @@
+language: python
+sudo: false
+cache:
+    directories:
+        - "~/.platformio"
+install:
+    - pip install -U platformio
+    - platformio update
+    - platformio lib -g install TinyGPSPlus U8G2
+script:
+    - platformio run
+deploy:
+    provider: releases
+    api_key:
+        secure: Czxja/w+0X3BkzfVwB6e5bSBxL271+245XOFWdmqq0coP5Fms6TjXT4n6TjfbGjzZOmVgV9PHnXrXOUnG8QRnORPrUxd2ZLUE5hN1+ZwSQUWcEgdNngFR5eHoguKdO9DntnHElaWydu73AASLCr5ZURAlTu6JZb92euhlVAqF40SY/4SS5rWTeLU1wgdQ2vLE+eGMnzLx1m3l/5KDWYh89XOMRaQCrqwyco9NMEvuFSMVe37K6SvkDCsP3sH1RMxS/bkuMnCuRFVag0XxbJPieGjh6T7mGrdvDlL4jYhg/2jTjQjv1hoiQvHpAtBVe3mxDNWMOeOAEGpDIeNUcHEFn783XPeFsUEcwqOFgLtaxygcqd0sSl8CVPue2C8d24dAVm++Q46JHZ6I13j4mqKToXlMINXOx53G8LAdO2nfVZsJYdKqe5TcTqXK0riUxAwEPucMC7cy7JLoBAuBf7+AA0q+uRj9VECe4nDdy0YDxGV0HzdFdsOJURltyVa0echsLerqRJcYat7k2OOGb9/6HZoWeensxombLkX/rtaXzMt8/BepfmEFpuFy+CwisKlboc4fLk4gb4ECOy5pTtPIRQTg+5ae4j9fXPQnjxkRNeWfOr4X4zZfLlXRvrxvzV25tHWqh6xuYucAqrgwt5geGzMebLST6x3zx30SPKhsxU=
+    skip_cleanup: true
+    file:
+        - ".pio/build/heltec_wifi_kit_8/firmware.bin"
+        - ".pio/build/heltec_wifi_kit_8/firmware.elf"
+    on:
+        repo: cohaolain/CruiseControl-ESP8266
+        tags: true
+    prerelease: true # for now

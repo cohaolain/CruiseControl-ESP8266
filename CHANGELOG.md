@@ -7,6 +7,15 @@ The format is based on
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2020-04-21
+
+### Added
+
+-   Travis CI integration
+    -   This will check that tagged project versions' firmwares compile
+        succesfully, and then add the resulting firmware image as a release on
+        GitHub.
+
 ## [0.1.0] - 2020-04-21
 
 ### Added
