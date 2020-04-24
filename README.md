@@ -15,6 +15,7 @@ I will write a better description at some point.
     -   I used a Heltec WiFi Kit 8
         -   Which the manufacturer & retailer have about 5 completely different pinout diagrams for.
         -   Eventually found a correct one after much digging 😤.
+        -   You can find it here: [Heltec Wifi Kit 8 - Pinout Diagram](diagrams/Heltec_WiFi_Kit_8_Pinout_Diagram.pdf)
     -   Not actually using the WiFi capabilities of this myself, _yet_.
 -   OLED display
     -   Ideally compatible with `u8g2`.
