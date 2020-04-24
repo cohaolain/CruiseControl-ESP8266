@@ -14,6 +14,7 @@ and this project adheres to
 -   Checks for missing/stale serial data/GPS updates
 -   Better representation of the GPS status on display
 -   Pinout diagram for Heltec WiFi Kit 8
+-   Build status badge for README.md
 
 ### Changed
 
