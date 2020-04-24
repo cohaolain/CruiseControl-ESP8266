@@ -32,6 +32,8 @@ bool redPushed;
 int lastUpdatePeriod = 0;
 int lastButtonPress = 0;
 
+bool serialConnectionStale;
+
 void preinit()
 {
     // Don't need WiFi for this project, turn it off to save power
@@ -120,17 +122,29 @@ void performPendingButtonActions()
     }
 }
 
-void waitForSerial()
+bool waitForSerial()
 {
+    performPendingButtonActions();
     String s;
+    uint waitSince = millis();
     while (!ss.available())
     {
+        yield();
+        if (millis() - waitSince > 1000)
+        {
+            serialConnectionStale = true;
+            return !serialConnectionStale;
+        }
     }
+
     do
     {
         gps.encode(ss.read());
-        delayMicroseconds(500);
+        delay(1);
     } while (ss.available());
+    serialConnectionStale = false;
+    performPendingButtonActions();
+    return !serialConnectionStale;
 }
 
 static char *formattedTime()
@@ -202,13 +216,15 @@ void printAccuracy(int x, int y)
     u8g2.setFont(fonts[0]);
     u8g2.setCursor(x, y);
     u8g2.print("Á");
-    if (gps.hdop.isValid())
+    if (gps.hdop.isValid() && !serialConnectionStale)
     {
         u8g2.print(gps.hdop.hdop());
     }
     else
     {
-        u8g2.print("?");
+        Serial.println(gps.hdop.isValid() ? "valid" : "invalid");
+        Serial.println(!serialConnectionStale ? "stale" : "not stale");
+        u8g2.print("...");
     }
 }
 
@@ -256,6 +272,29 @@ void checkSpeed()
     else if (currentSpeed() > speeds[currentSpeedLimIndex])
         tooFast();
 }
+
+void showNoSerial()
+{
+    u8g2.clearBuffer();
+    u8g2.setFont(fonts[1]);
+    u8g2.setCursor(6, 12);
+    u8g2.print("No GPS Module");
+    u8g2.setCursor(12, 28);
+    u8g2.print("Attached :(");
+    u8g2.sendBuffer();
+}
+
+void showInvalid()
+{
+    u8g2.clearBuffer();
+    u8g2.setFont(fonts[1]);
+    u8g2.setCursor(22, 12);
+    u8g2.print("Searching");
+    u8g2.setCursor(28, 28);
+    u8g2.print("for GPS...");
+    u8g2.sendBuffer();
+}
+
 void setup()
 {
     // Serial for debugging
@@ -268,12 +307,6 @@ void setup()
     // Setup OLED display
     u8g2.begin();
     u8g2.setFlipMode(1);
-    u8g2.setFont(fonts[1]);
-    u8g2.setCursor(0, 12);
-    u8g2.print("Searching");
-    u8g2.setCursor(0, 32);
-    u8g2.print("for GPS...");
-    u8g2.sendBuffer();
 
     // Setup buttons
     pinMode(redPin, OUTPUT);
@@ -284,22 +317,33 @@ void setup()
 
 void loop()
 {
-    waitForSerial();
-    performPendingButtonActions();
+    if (waitForSerial())
+    {
+        if (gps.hdop.hdop() >= 50)
+        {
+            showInvalid();
+        }
+        else
+        {
+            updateGPS();
+            checkSpeed();
 
-    updateGPS();
-    checkSpeed();
+            // Render UI
+            u8g2.clearBuffer();
+            u8g2.drawFrame(0, 0, 128, 32);
 
-    // Render UI
-    u8g2.clearBuffer();
-    u8g2.drawFrame(0, 0, 128, 32);
+            printAccuracy(2, 10);
+            printSpeed();
+            printLimit(112, 17);
 
-    printAccuracy(2, 10);
-    printSpeed();
-    printLimit(112, 17);
-
-    // Write UI into display buffer
-    noInterrupts();
-    u8g2.sendBuffer();
-    interrupts();
+            // Write UI into display buffer
+            noInterrupts();
+            u8g2.sendBuffer();
+            interrupts();
+        }
+    }
+    else
+    {
+        showNoSerial();
+    }
 }

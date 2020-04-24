@@ -7,6 +7,19 @@ The format is based on
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+-   Checks for missing/stale serial data/GPS updates
+-   Better representation of the GPS status on display
+
+### Changed
+
+-   Button actions now occur before and after GPS serial read,
+    not just before.
+-   Now can yield to h/w interrupts when waiting for serial data
+
 ## [0.1.1] - 2020-04-21
 
 ### Added
