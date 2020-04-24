@@ -1,4 +1,5 @@
-# ESP8266 Cruise Control (GPS/OLED)
+# ESP8266 Cruise Control (GPS/OLED) 
+[![Build Status](https://travis-ci.com/cohaolain/CruiseControl-ESP8266.svg?branch=master)](https://travis-ci.com/cohaolain/CruiseControl-ESP8266)
 
 This is a project I'm working on so I can have cruise control _(ish)_ in my car.
 
