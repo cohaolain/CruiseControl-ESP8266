@@ -9,6 +9,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+-   Better documentation for installing dependency libraries.
+
 ### Changed
 
 -   GPS data is now sent to serial for debugging purposes.

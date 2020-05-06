@@ -1,4 +1,5 @@
-# ESP8266 Cruise Control (GPS/OLED) 
+# ESP8266 Cruise Control (GPS/OLED)
+
 [![Build Status](https://travis-ci.com/cohaolain/CruiseControl-ESP8266.svg?branch=master)](https://travis-ci.com/cohaolain/CruiseControl-ESP8266)
 
 This is a project I'm working on so I can have cruise control _(ish)_ in my car.
@@ -46,6 +47,22 @@ I will write a better description at some point.
 Will include a schematic in the future.
 
 ## Libraries
+
+If you're using the PlatformIO IDE, you can install all
+required libraries with the single line:
+
+```bash
+platformio lib -g install TinyGPSPlus U8G2
+```
+
+You need to have `platformio` binary in your `PATH`. You can do this by adding
+the following to the bottom of your `~/.bashrc`:
+
+```bash
+export PATH=$PATH:~/.platformio/penv/bin
+```
+
+Alternatively, use the relevant library-installation interface in your IDE of choice (e.g. PlatformIO or Arduino).
 
 -   **SoftwareSerial**
     -   For communicating with the GPS module
