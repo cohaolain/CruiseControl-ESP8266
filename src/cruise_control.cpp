@@ -137,11 +137,15 @@ bool waitForSerial()
         }
     }
 
+    Serial.println("Start serial:");
     do
     {
-        gps.encode(ss.read());
+        char c = ss.read();
+        gps.encode(c);
+        Serial.print(c);
         delay(1);
     } while (ss.available());
+    Serial.println("End serial.\n");
     serialConnectionStale = false;
     performPendingButtonActions();
     return !serialConnectionStale;
