@@ -10,9 +10,9 @@ TinyGPSPlus gps;
 SoftwareSerial ss(14, -1);
 U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/16, SCL, SDA);
 
-const int buzzerPin = D6;
+const int buzzerPin = D8;
 const int greenPin = D7;
-const int redPin = D8;
+const int redPin = D6;
 
 const int numPrevReadings = 10;
 const int numSpeeds = 12;
@@ -145,7 +145,7 @@ bool waitForSerial()
         Serial.print(c);
         delay(1);
     } while (ss.available());
-    Serial.println("End serial.\n");
+    Serial.println();
     serialConnectionStale = false;
     performPendingButtonActions();
     return !serialConnectionStale;
