@@ -16,6 +16,7 @@ and this project adheres to
 ### Changed
 
 -   GPS data is now sent to serial for debugging purposes.
+-   All baud rates are now 9600
 
 ## [0.1.2] - 2020-04-24
 
