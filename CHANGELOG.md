@@ -24,6 +24,7 @@ and this project adheres to
 
 -   U-Blox Neo-6M configuration
     -   Now provides the correct messages
+-   Invalid fix screen now shown if the speed data given is invalid
 
 ### Removed
 
