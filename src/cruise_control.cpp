@@ -137,7 +137,6 @@ bool waitForSerial()
         }
     }
 
-    Serial.println("Start serial:");
     do
     {
         char c = ss.read();
@@ -226,8 +225,6 @@ void printAccuracy(int x, int y)
     }
     else
     {
-        Serial.println(gps.hdop.isValid() ? "valid" : "invalid");
-        Serial.println(!serialConnectionStale ? "stale" : "not stale");
         u8g2.print("...");
     }
 }
@@ -302,11 +299,11 @@ void showInvalid()
 void setup()
 {
     // Serial for debugging
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("Begin!");
 
     // Software serial for GPS
-    ss.begin(19200);
+    ss.begin(9600);
 
     // Setup OLED display
     u8g2.begin();
