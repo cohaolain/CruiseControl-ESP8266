@@ -1,14 +1,15 @@
+// Bare essentials
 #include <SoftwareSerial.h>
 #include <ESP8266WiFi.h>
 
+// GPS & display libraries
 #include <TinyGPS++.h>
 #include <U8g2lib.h>
 
-#define DEBUG
+// My libraries
+#include <Speedometer.h>
 
-TinyGPSPlus gps;
-SoftwareSerial ss(14, -1);
-U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/16, SCL, SDA);
+#define DEBUG
 
 const int buzzerPin = D8;
 const int greenPin = D7;
@@ -33,6 +34,12 @@ int lastUpdatePeriod = 0;
 int lastButtonPress = 0;
 
 bool serialConnectionStale;
+
+TinyGPSPlus gps;
+SoftwareSerial ss(14, -1);
+U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/16, SCL, SDA);
+
+Speedometer speedometer(u8g2, 24, 32, 16, speeds[currentSpeedLimIndex]);
 
 void preinit()
 {
@@ -87,6 +94,7 @@ bool updateSpeedLim(int indexDelta)
     if (currentSpeedLimIndex + indexDelta >= 0 && currentSpeedLimIndex + indexDelta < numSpeeds)
     {
         currentSpeedLimIndex += indexDelta;
+        speedometer.updateRange(speeds[currentSpeedLimIndex]);
         return true;
     }
     return false;
@@ -283,7 +291,7 @@ void showInvalid()
     u8g2.setFont(fonts[1]);
     u8g2.setCursor(22, 12);
     u8g2.print("Searching");
-    u8g2.setCursor(28, 28);
+    u8g2.setCursor(18, 28);
     u8g2.print("for GPS...");
     u8g2.sendBuffer();
 }
@@ -306,6 +314,9 @@ void setup()
     pinMode(greenPin, OUTPUT);
     attachInterrupt(digitalPinToInterrupt(redPin), onButtonPressed, RISING);
     attachInterrupt(digitalPinToInterrupt(greenPin), onButtonPressed, RISING);
+
+    // Setup UI
+    speedometer.updateRange(speeds[currentSpeedLimIndex]);
 }
 
 void loop()
@@ -329,6 +340,7 @@ void loop()
             printAccuracy(2, 10);
             printSpeed();
             printLimit(112, 17);
+            speedometer.draw(currentSpeed());
 
             // Write UI into display buffer
             noInterrupts();
