@@ -21,6 +21,7 @@ and this project adheres to
 -   U-Blox Neo-6M configuration
     -   Update rate is now 4 Hz instead of 5 Hz.
 -   Low-speed GPS data is no longer sometimes discarded
+-   GPS data now must have a HDOP of less than 4, instead of 50.
 
 ### Fixed
 

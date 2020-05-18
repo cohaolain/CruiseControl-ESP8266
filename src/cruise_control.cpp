@@ -312,7 +312,7 @@ void loop()
 {
     if (waitForSerial())
     {
-        if (gps.hdop.hdop() >= 50 || !gps.speed.isValid())
+        if (gps.hdop.hdop() >= 4 || !gps.speed.isValid())
         {
             noTone(buzzerPin);
             showInvalid();
