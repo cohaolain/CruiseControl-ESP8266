@@ -14,9 +14,11 @@ private:
     int center_x;
     int center_y;
     int min;
-    int max;
     int limit;
-    const double min_angle = PI / 12;
-    const double angle_limit = PI * 1.5;
+    const double normal_range = PI / 12;
+    const double overflow_range = PI / 6;
+
+    void drawTick(double speed, double shadeFrom, double shadeTo);
+    void drawTick(double speed);
     void drawNeedle(double speed);
 };
