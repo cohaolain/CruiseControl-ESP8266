@@ -18,13 +18,15 @@ and this project adheres to
 -   GPS data is now sent to serial for debugging purposes.
 -   All baud rates are now 9600.
 -   U-Blox Neo-6M configuration
-    -   Update rate is now 4 Hz instead of 5 Hz
+    -   Update rate is now 4 Hz instead of 5 Hz.
+-   Low-speed GPS data is no longer sometimes discarded
 
 ### Fixed
 
 -   U-Blox Neo-6M configuration
-    -   Now provides the correct messages
--   Invalid fix screen now shown if the speed data given is invalid
+    -   Now provides the correct messages.
+-   Invalid fix screen now shown if the speed data given is invalid.
+-   GPS smoothing resulting in new values not being stored.
 
 ### Removed
 

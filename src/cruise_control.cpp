@@ -200,15 +200,7 @@ void updateGPS()
 {
     if (gps.speed.isUpdated())
     {
-        double reading = gps.speed.kmph();
-        if (reading > 3.5 && !allPrevReadingsZero())
-        {
-            addReading(reading);
-        }
-        else
-        {
-            addReading(0);
-        }
+        addReading(gps.speed.kmph());
         lastUpdatePeriod = millis() - lastUpdate;
         lastUpdate = millis();
     }
