@@ -13,6 +13,7 @@ and this project adheres to
 
 -   Better documentation for installing dependency libraries.
 -   Warning tone now stops if we don't have reliable up-to-date GPS data.
+-   There is now a cap on the max pitch of the warning buzzer.
 
 ### Changed
 

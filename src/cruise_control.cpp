@@ -250,7 +250,7 @@ void printLimit(int x, int y)
 void tooFast()
 {
     double speedingAmount = ((currentSpeed() / speeds[currentSpeedLimIndex]) - 1) * 100;
-    double freq = map(speedingAmount, 0, 50, 220, 800);
+    int freq = min(map(speedingAmount, 0, 50, 220, 800), 800l);
     tone(buzzerPin, freq);
     wasSpeeding = true;
 }
