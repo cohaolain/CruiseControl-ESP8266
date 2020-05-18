@@ -314,6 +314,7 @@ void loop()
     {
         if (gps.hdop.hdop() >= 50 || !gps.speed.isValid())
         {
+            noTone(buzzerPin);
             showInvalid();
         }
         else
@@ -337,6 +338,7 @@ void loop()
     }
     else
     {
+        noTone(buzzerPin);
         showNoSerial();
     }
 }

@@ -12,6 +12,7 @@ and this project adheres to
 ### Added
 
 -   Better documentation for installing dependency libraries.
+-   Warning tone now stops if we don't have reliable up-to-date GPS data.
 
 ### Changed
 
