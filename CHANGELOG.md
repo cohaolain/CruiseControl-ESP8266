@@ -7,6 +7,36 @@ The format is based on
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2020-05-19
+
+### Added
+
+-   New speedometer component to UI.
+-   Better documentation for installing dependency libraries.
+-   Warning tone now stops if we don't have reliable up-to-date GPS data.
+-   There is now a cap on the max pitch of the warning buzzer.
+
+### Changed
+
+-   GPS data is now sent to serial for debugging purposes.
+-   All baud rates are now 9600.
+-   U-Blox Neo-6M configuration
+    -   Update rate is now 4 Hz instead of 5 Hz.
+-   Low-speed GPS data is no longer sometimes discarded
+-   GPS data now must have a HDOP of less than 4, instead of 50.
+-   Adjusted text alignment on invalid-fix page.
+
+### Fixed
+
+-   U-Blox Neo-6M configuration
+    -   Now provides the correct messages.
+-   Invalid fix screen now shown if the speed data given is invalid.
+-   GPS smoothing resulting in new values not being stored.
+
+### Removed
+
+-   U-Blox Neo-7 configuration, as I can't test this for now.
+
 ## [0.1.2] - 2020-04-24
 
 ### Added

@@ -1,18 +1,19 @@
+// Bare essentials
 #include <SoftwareSerial.h>
 #include <ESP8266WiFi.h>
 
+// GPS & display libraries
 #include <TinyGPS++.h>
 #include <U8g2lib.h>
 
+// My libraries
+#include <Speedometer.h>
+
 #define DEBUG
 
-TinyGPSPlus gps;
-SoftwareSerial ss(14, -1);
-U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/16, SCL, SDA);
-
-const int buzzerPin = D6;
+const int buzzerPin = D8;
 const int greenPin = D7;
-const int redPin = D8;
+const int redPin = D6;
 
 const int numPrevReadings = 10;
 const int numSpeeds = 12;
@@ -33,6 +34,12 @@ int lastUpdatePeriod = 0;
 int lastButtonPress = 0;
 
 bool serialConnectionStale;
+
+TinyGPSPlus gps;
+SoftwareSerial ss(14, -1);
+U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/16, SCL, SDA);
+
+Speedometer speedometer(u8g2, 24, 32, 16, speeds[currentSpeedLimIndex]);
 
 void preinit()
 {
@@ -87,6 +94,7 @@ bool updateSpeedLim(int indexDelta)
     if (currentSpeedLimIndex + indexDelta >= 0 && currentSpeedLimIndex + indexDelta < numSpeeds)
     {
         currentSpeedLimIndex += indexDelta;
+        speedometer.updateRange(speeds[currentSpeedLimIndex]);
         return true;
     }
     return false;
@@ -139,9 +147,12 @@ bool waitForSerial()
 
     do
     {
-        gps.encode(ss.read());
+        char c = ss.read();
+        gps.encode(c);
+        Serial.print(c);
         delay(1);
     } while (ss.available());
+    Serial.println();
     serialConnectionStale = false;
     performPendingButtonActions();
     return !serialConnectionStale;
@@ -197,15 +208,7 @@ void updateGPS()
 {
     if (gps.speed.isUpdated())
     {
-        double reading = gps.speed.kmph();
-        if (reading > 3.5 && !allPrevReadingsZero())
-        {
-            addReading(reading);
-        }
-        else
-        {
-            addReading(0);
-        }
+        addReading(gps.speed.kmph());
         lastUpdatePeriod = millis() - lastUpdate;
         lastUpdate = millis();
     }
@@ -222,8 +225,6 @@ void printAccuracy(int x, int y)
     }
     else
     {
-        Serial.println(gps.hdop.isValid() ? "valid" : "invalid");
-        Serial.println(!serialConnectionStale ? "stale" : "not stale");
         u8g2.print("...");
     }
 }
@@ -257,7 +258,7 @@ void printLimit(int x, int y)
 void tooFast()
 {
     double speedingAmount = ((currentSpeed() / speeds[currentSpeedLimIndex]) - 1) * 100;
-    double freq = map(speedingAmount, 0, 50, 220, 800);
+    int freq = min(map(speedingAmount, 0, 50, 220, 800), 800l);
     tone(buzzerPin, freq);
     wasSpeeding = true;
 }
@@ -290,7 +291,7 @@ void showInvalid()
     u8g2.setFont(fonts[1]);
     u8g2.setCursor(22, 12);
     u8g2.print("Searching");
-    u8g2.setCursor(28, 28);
+    u8g2.setCursor(18, 28);
     u8g2.print("for GPS...");
     u8g2.sendBuffer();
 }
@@ -298,11 +299,11 @@ void showInvalid()
 void setup()
 {
     // Serial for debugging
-    Serial.begin(115200);
+    Serial.begin(9600);
     Serial.println("Begin!");
 
     // Software serial for GPS
-    ss.begin(19200);
+    ss.begin(9600);
 
     // Setup OLED display
     u8g2.begin();
@@ -313,14 +314,18 @@ void setup()
     pinMode(greenPin, OUTPUT);
     attachInterrupt(digitalPinToInterrupt(redPin), onButtonPressed, RISING);
     attachInterrupt(digitalPinToInterrupt(greenPin), onButtonPressed, RISING);
+
+    // Setup UI
+    speedometer.updateRange(speeds[currentSpeedLimIndex]);
 }
 
 void loop()
 {
     if (waitForSerial())
     {
-        if (gps.hdop.hdop() >= 50)
+        if (gps.hdop.hdop() >= 4 || !gps.speed.isValid())
         {
+            noTone(buzzerPin);
             showInvalid();
         }
         else
@@ -335,6 +340,7 @@ void loop()
             printAccuracy(2, 10);
             printSpeed();
             printLimit(112, 17);
+            speedometer.draw(currentSpeed());
 
             // Write UI into display buffer
             noInterrupts();
@@ -344,6 +350,7 @@ void loop()
     }
     else
     {
+        noTone(buzzerPin);
         showNoSerial();
     }
 }
