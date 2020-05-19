@@ -13,7 +13,7 @@ private:
     int radius;
     int center_x;
     int center_y;
-    int min;
+    int lowerBound;
     int limit;
     const double normal_range = PI / 12;
     const double overflow_range = PI / 6;

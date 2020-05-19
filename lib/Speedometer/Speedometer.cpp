@@ -21,7 +21,7 @@ void Speedometer::draw(double speed)
 void Speedometer::updateRange(int newLimit)
 {
     limit = newLimit;
-    min = limit * 0.7;
+    lowerBound = limit * 0.8;
 }
 
 double mapf(double x, double in_min, double in_max, double out_min, double out_max)
@@ -35,10 +35,10 @@ double mapf(double x, double in_min, double in_max, double out_min, double out_m
 
 void Speedometer::drawTick(double speed, double shadeFrom, double shadeTo)
 {
-    double theta = mapf(speed, min, limit, normal_range, PI - normal_range);
+    double theta = mapf(speed, lowerBound, limit, normal_range, PI - normal_range);
 
-    if (theta > PI + overflow_range || theta < -overflow_range)
-        return;
+    theta = min(theta, PI + overflow_range);
+    theta = max(theta, -overflow_range);
 
     const int inner_x = center_x - (cos(theta) * (radius * shadeFrom));
     const int inner_y = center_y - (sin(theta) * (radius * shadeFrom));
