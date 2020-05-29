@@ -15,6 +15,8 @@ and this project adheres to
 -   Current list of speed limits.
 -   Logic for storing new GPS readings.
 -   Flipped the OLED orientation.
+-   Debug serial baud rate is now 1843200
+    (not useful to link it to the GPS baud rate anymore).
 
 ### Fixed
 

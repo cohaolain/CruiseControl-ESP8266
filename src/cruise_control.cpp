@@ -305,7 +305,7 @@ void showInvalid()
 void setup()
 {
     // Serial for debugging
-    Serial.begin(9600);
+    Serial.begin(1843200);
     Serial.println("Begin!");
 
     // Software serial for GPS
