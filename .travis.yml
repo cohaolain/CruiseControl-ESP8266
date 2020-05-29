@@ -20,4 +20,5 @@ deploy:
     on:
         repo: cohaolain/CruiseControl-ESP8266
         tags: true
+    draft: true
     prerelease: true # for now

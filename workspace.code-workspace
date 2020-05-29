@@ -21,7 +21,9 @@
 			"initializer_list": "cpp",
 			"algorithm": "cpp",
 			"random": "cpp",
-			"limits": "cpp"
+			"limits": "cpp",
+			"iosfwd": "cpp",
+			"streambuf": "cpp"
 		}
 	}
 }
