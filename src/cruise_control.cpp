@@ -335,7 +335,6 @@ void loop()
 
             // Render UI
             u8g2.clearBuffer();
-            u8g2.drawFrame(0, 0, 128, 32);
 
             printAccuracy(2, 10);
             printSpeed();
