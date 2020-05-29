@@ -313,7 +313,6 @@ void setup()
 
     // Setup OLED display
     u8g2.begin();
-    u8g2.setFlipMode(1);
 
     // Setup buttons
     pinMode(redPin, OUTPUT);
