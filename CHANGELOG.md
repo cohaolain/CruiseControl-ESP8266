@@ -17,6 +17,8 @@ and this project adheres to
 -   Flipped the OLED orientation.
 -   Debug serial baud rate is now 1843200
     (not useful to link it to the GPS baud rate anymore).
+-   Doesn't keep buzzing if GPS signal is lost while
+    speeding is detected.
 
 ### Fixed
 

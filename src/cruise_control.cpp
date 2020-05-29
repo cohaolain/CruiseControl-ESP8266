@@ -330,6 +330,7 @@ void loop()
     {
         if (gps.hdop.hdop() >= 4 || !gps.speed.isValid())
         {
+            if (wasSpeeding)
             noTone(buzzerPin);
             showInvalid();
         }
@@ -347,13 +348,12 @@ void loop()
             speedometer.draw(currentSpeed());
 
             // Write UI into display buffer
-            noInterrupts();
             u8g2.sendBuffer();
-            interrupts();
         }
     }
     else
     {
+        if (wasSpeeding)
         noTone(buzzerPin);
         showNoSerial();
     }
