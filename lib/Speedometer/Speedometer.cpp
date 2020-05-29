@@ -1,8 +1,7 @@
 #include <Speedometer.h>
 
-Speedometer::Speedometer(U8G2 u8g2Instance, int height, int width, int x, int initLimit)
+Speedometer::Speedometer(int height, int width, int x, int initLimit)
 {
-    u8g2 = u8g2Instance;
     updateRange(initLimit);
 
     radius = (4 * pow(height, 2) + pow(width, 2)) / (8 * height);

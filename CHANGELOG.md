@@ -19,6 +19,8 @@ and this project adheres to
     (not useful to link it to the GPS baud rate anymore).
 -   Doesn't keep buzzing if GPS signal is lost while
     speeding is detected.
+-   The u8g2 library class instance is now an global variable,
+    instead of manually passing a reference to it in constructors.
 
 ### Fixed
 

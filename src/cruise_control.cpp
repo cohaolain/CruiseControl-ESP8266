@@ -37,8 +37,9 @@ bool serialConnectionStale;
 TinyGPSPlus gps;
 SoftwareSerial ss(14, -1);
 U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/16, SCL, SDA);
+U8G2 globalu8g2instance = u8g2;
 
-Speedometer speedometer(u8g2, 24, 32, 16, speeds[currentSpeedLimIndex]);
+Speedometer speedometer(24, 32, 16, speeds[currentSpeedLimIndex]);
 
 void preinit()
 {
