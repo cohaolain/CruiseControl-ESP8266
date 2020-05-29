@@ -30,7 +30,6 @@ int lastUpdate = 0;
 bool pendingButtonAction;
 bool greenPushed;
 bool redPushed;
-int lastUpdatePeriod = 0;
 int lastButtonPress = 0;
 
 bool serialConnectionStale;
@@ -208,10 +207,17 @@ void updateGPS()
 {
     if (gps.speed.isUpdated())
     {
-        addReading(gps.speed.kmph());
-        lastUpdatePeriod = millis() - lastUpdate;
-        lastUpdate = millis();
+        double reading = gps.speed.kmph();
+        if (reading >= 2)
+            addReading(reading);
+        else
+            addReading(0);
     }
+    else
+    {
+        return;
+}
+    lastUpdate = millis();
 }
 
 void printAccuracy(int x, int y)

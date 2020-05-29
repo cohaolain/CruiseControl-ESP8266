@@ -13,6 +13,7 @@ and this project adheres to
 
 -   Removed frame which surrounds the UI on the OLED.
 -   Current list of speed limits.
+-   Logic for storing new GPS readings.
 
 ### Fixed
 
