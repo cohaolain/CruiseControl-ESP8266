@@ -9,8 +9,13 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+-   More debugging serial output. Now in the form of NMEA messages.
+
 ### Changed
 
+-   Major overhaul of GPS serial data handling.
 -   Removed frame which surrounds the UI on the OLED.
 -   Current list of speed limits.
 -   Logic for storing new GPS readings.

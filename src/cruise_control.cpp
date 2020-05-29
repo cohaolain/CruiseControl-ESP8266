@@ -25,14 +25,14 @@ bool deviceDisabled;
 
 int currentSpeedLimIndex = 6;
 double prevReadings[numPrevReadings];
-int lastUpdate = 0;
 
 bool pendingButtonAction;
 bool greenPushed;
 bool redPushed;
-int lastButtonPress = 0;
 
-bool serialConnectionStale;
+int lastUpdateGPS = 0;
+int lastButtonPress = 0;
+int lastSerialRead = 0;
 
 TinyGPSPlus gps;
 SoftwareSerial ss(14, -1);
@@ -130,32 +130,63 @@ void performPendingButtonActions()
     }
 }
 
+void addReading(double reading)
+{
+    double temp1 = prevReadings[0];
+    for (int i = 1; i < numPrevReadings; i++)
+    {
+        double temp2 = prevReadings[i];
+        prevReadings[i] = temp1;
+        temp1 = temp2;
+    }
+    prevReadings[0] = reading;
+}
+
+void updateGPS()
+{
+    if (gps.speed.isUpdated())
+    {
+        double reading = gps.speed.kmph();
+        if (reading >= 2)
+            addReading(reading);
+        else
+            addReading(0);
+        lastUpdateGPS = millis();
+    }
+}
+
 bool waitForSerial()
 {
     performPendingButtonActions();
-    String s;
-    uint waitSince = millis();
-    while (!ss.available())
+
+    if (ss.available())
     {
-        yield();
-        if (millis() - waitSince > 1000)
+        while (ss.available())
         {
-            serialConnectionStale = true;
-            return !serialConnectionStale;
+            String nmeaString = ss.readStringUntil('\n');
+            for (char c : nmeaString)
+            {
+                gps.encode(c);
+            }
+            Serial.println(nmeaString);
         }
+
+        updateGPS();
+
+        Serial.printf("$GPTXT,CC says,hdop (%s): %.2f\n", gps.hdop.isValid() ? "valid" : "invalid", gps.hdop.hdop());
+        Serial.printf("$GPTXT,CC says,location (%s): %f, %f\n", gps.location.isValid() ? "valid" : "invalid", gps.location.lat(), gps.location.lng());
+        Serial.printf("$GPTXT,CC says,speed (%s): %.2f km/h\n", gps.speed.isValid() ? "valid" : "invalid", gps.speed.kmph());
+        Serial.printf("$GPTXT,CC says,stated speed (%s): %.2f km/h\n", gps.speed.isValid() ? "valid" : "invalid", currentSpeed());
+        Serial.printf("$GPTXT,CC says,passed: %d, failed: %d, success: %.2f\%\n", gps.passedChecksum(), gps.failedChecksum(), ((double)gps.passedChecksum()) / max((uint32_t)1, (gps.passedChecksum() + gps.failedChecksum())));
+        Serial.print("$GPTXT,CC says,prevReadings: ");
+        for (auto val : prevReadings)
+            Serial.printf("%.2f ", val);
+        Serial.println("\n");
+
+        lastSerialRead = millis();
     }
 
-    do
-    {
-        char c = ss.read();
-        gps.encode(c);
-        Serial.print(c);
-        delay(1);
-    } while (ss.available());
-    Serial.println();
-    serialConnectionStale = false;
-    performPendingButtonActions();
-    return !serialConnectionStale;
+    return millis() - lastSerialRead <= 1000;
 }
 
 static char *formattedTime()
@@ -192,41 +223,11 @@ bool allPrevReadingsZero()
     return true;
 }
 
-void addReading(double reading)
-{
-    double temp1 = prevReadings[0];
-    for (int i = 1; i < numPrevReadings; i++)
-    {
-        double temp2 = prevReadings[i];
-        prevReadings[i] = temp1;
-        temp1 = temp2;
-    }
-    prevReadings[0] = reading;
-}
-
-void updateGPS()
-{
-    if (gps.speed.isUpdated())
-    {
-        double reading = gps.speed.kmph();
-        if (reading >= 2)
-            addReading(reading);
-        else
-            addReading(0);
-    }
-    else
-    {
-        return;
-}
-    lastUpdate = millis();
-}
-
 void printAccuracy(int x, int y)
 {
     u8g2.setFont(fonts[0]);
     u8g2.setCursor(x, y);
-    u8g2.print("Á");
-    if (gps.hdop.isValid() && !serialConnectionStale)
+    if (gps.hdop.isValid())
     {
         u8g2.print(gps.hdop.hdop());
     }
@@ -310,7 +311,8 @@ void setup()
     Serial.println("Begin!");
 
     // Software serial for GPS
-    ss.begin(9600);
+    ss.begin(9600, SWSERIAL_8N1, 14, -1, false, 256);
+    ss.setTimeout(10);
 
     // Setup OLED display
     u8g2.begin();
@@ -332,12 +334,11 @@ void loop()
         if (gps.hdop.hdop() >= 4 || !gps.speed.isValid())
         {
             if (wasSpeeding)
-            noTone(buzzerPin);
+                noTone(buzzerPin);
             showInvalid();
         }
         else
         {
-            updateGPS();
             checkSpeed();
 
             // Render UI
@@ -355,7 +356,7 @@ void loop()
     else
     {
         if (wasSpeeding)
-        noTone(buzzerPin);
+            noTone(buzzerPin);
         showNoSerial();
     }
 }
