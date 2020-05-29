@@ -11,6 +11,8 @@ and this project adheres to
 
 ### Added
 
+-   The **`safetyMultiplier`**, which adds 5% to the current speed.
+    This will lead to earlier warnings, and just slower driving in general.
 -   More debugging serial output. Now in the form of NMEA messages.
 
 ### Changed

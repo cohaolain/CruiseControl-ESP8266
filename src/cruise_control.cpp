@@ -20,6 +20,8 @@ const int numSpeeds = 11;
 const int speeds[numSpeeds] = {5, 10, 15, 20, 25, 30, 50, 60, 80, 100, 120};
 const uint8_t *fonts[] = {u8g2_font_profont12_tf, u8g2_font_profont17_mf, u8g2_font_profont12_mf};
 
+const double safetyMultiplier = 1.05;
+
 bool wasSpeeding;
 bool deviceDisabled;
 
@@ -85,7 +87,7 @@ double currentSpeed()
     {
         acc += val;
     }
-    return acc / numPrevReadings;
+    return (acc / numPrevReadings) * safetyMultiplier;
 }
 
 bool updateSpeedLim(int indexDelta)
