@@ -27,6 +27,7 @@ and this project adheres to
 -   The u8g2 library class instance is now an global variable,
     instead of manually passing a reference to it in constructors.
 -   Travis builds are now initially published as drafts.
+-   Moving average now only considers past 3 readings (750ms), not 10.
 
 ### Fixed
 
