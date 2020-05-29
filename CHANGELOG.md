@@ -7,6 +7,12 @@ The format is based on
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+-   Removed frame which surrounds the UI on the OLED.
+
 ## [0.1.3] - 2020-05-19
 
 ### Added
