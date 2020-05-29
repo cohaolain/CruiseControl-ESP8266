@@ -12,6 +12,13 @@ and this project adheres to
 ### Changed
 
 -   Removed frame which surrounds the UI on the OLED.
+-   Current list of speed limits.
+
+### Fixed
+
+-   Incorrect declaration of number of possible speed limits
+    no longer results in accessing beyond the end of an array
+    when changing the current limit.
 
 ## [0.1.3] - 2020-05-19
 

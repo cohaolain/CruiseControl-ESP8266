@@ -16,14 +16,14 @@ const int greenPin = D7;
 const int redPin = D6;
 
 const int numPrevReadings = 10;
-const int numSpeeds = 12;
-const int speeds[] = {1, 5, 10, 15, 20, 30, 45, 50, 60, 80, 100, 120};
+const int numSpeeds = 11;
+const int speeds[numSpeeds] = {5, 10, 15, 20, 25, 30, 50, 60, 80, 100, 120};
 const uint8_t *fonts[] = {u8g2_font_profont12_tf, u8g2_font_profont17_mf, u8g2_font_profont12_mf};
 
 bool wasSpeeding;
 bool deviceDisabled;
 
-int currentSpeedLimIndex = 7;
+int currentSpeedLimIndex = 6;
 double prevReadings[numPrevReadings];
 int lastUpdate = 0;
 
