@@ -1,7 +1,7 @@
 #pragma once
 #include <U8g2lib.h>
 
-extern U8G2 globalu8g2instance;
+extern U8G2 globalInstanceU8G2;
 
 class Speedometer
 {
@@ -11,7 +11,7 @@ public:
     void updateRange(int newLimit);
 
 private:
-    U8G2 u8g2 = globalu8g2instance;
+    U8G2 u8g2 = globalInstanceU8G2;
     int radius;
     int center_x;
     int center_y;
