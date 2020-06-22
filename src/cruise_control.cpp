@@ -9,6 +9,7 @@
 // My libraries
 #include <Speedometer.h>
 #include <StartLogo.h>
+#include <Buzzer.h>
 
 #define DEBUG
 
@@ -49,37 +50,6 @@ void preinit()
 {
     // Don't need WiFi for this project, turn it off to save power
     WiFi.preinitWiFiOff();
-}
-
-void ackBeep(bool doTwice)
-{
-    tone(buzzerPin, 880, doTwice ? 75 : 100);
-    if (doTwice)
-    {
-        delay(125);
-        ackBeep(false);
-    }
-}
-
-void ackBeep()
-{
-    ackBeep(false);
-}
-
-void actionBeep(bool isNice)
-{
-    if (isNice)
-    {
-        tone(buzzerPin, 650, 75);
-        delay(75);
-        tone(buzzerPin, 880, 75);
-    }
-    else
-    {
-        tone(buzzerPin, 880, 75);
-        delay(75);
-        tone(buzzerPin, 650, 75);
-    }
 }
 
 double currentSpeed()
