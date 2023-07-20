@@ -8,6 +8,8 @@
 
 // My libraries
 #include <Speedometer.h>
+#include <StartLogo.h>
+#include <Buzzer.h>
 
 #define DEBUG
 
@@ -42,42 +44,12 @@ U8G2_SSD1306_128X32_UNIVISION_F_HW_I2C u8g2(U8G2_R0, /* reset=*/16, SCL, SDA);
 U8G2 globalInstanceU8G2 = u8g2;
 
 Speedometer speedometer(24, 32, 16, speeds[currentSpeedLimIndex]);
+StartLogo Logo(0, 0);
 
 void preinit()
 {
     // Don't need WiFi for this project, turn it off to save power
     WiFi.preinitWiFiOff();
-}
-
-void ackBeep(bool doTwice)
-{
-    tone(buzzerPin, 880, doTwice ? 75 : 100);
-    if (doTwice)
-    {
-        delay(125);
-        ackBeep(false);
-    }
-}
-
-void ackBeep()
-{
-    ackBeep(false);
-}
-
-void actionBeep(bool isNice)
-{
-    if (isNice)
-    {
-        tone(buzzerPin, 650, 75);
-        delay(75);
-        tone(buzzerPin, 880, 75);
-    }
-    else
-    {
-        tone(buzzerPin, 880, 75);
-        delay(75);
-        tone(buzzerPin, 650, 75);
-    }
 }
 
 double currentSpeed()
@@ -327,6 +299,11 @@ void setup()
 
     // Setup UI
     speedometer.updateRange(speeds[currentSpeedLimIndex]);
+
+    // Show logo
+    Logo.displayLogo(0);
+    u8g2.sendBuffer();
+    delay(10000);
 }
 
 void loop()

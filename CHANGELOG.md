@@ -7,6 +7,16 @@ The format is based on
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+-   A startup screen/logo thing. While we search for a GPS signal!
+
+### Changed
+
+-   Seperated Buzzer functions into an included file.
+
 ## [0.2.1] - 2020-05-29
 
 ### Added
