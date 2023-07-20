@@ -72,7 +72,3 @@ Alternatively, use the relevant library-installation interface in your IDE of ch
     -   For all our display interfacing needs
 -   [**ESP8266WiFi**](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi)
     -   For (_now_), this is just to turn off the WiFi capabilities of the ESP8266.
-
-## More
-
-Eventually....
